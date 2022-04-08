@@ -1,0 +1,47 @@
+{% extends 'partials/layout.html' %}
+
+{% block title %}
+    Edit Post
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form action="{% url 'posts:update' id=post.id %}" class="form-sample" method="post">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label>Title</label>
+                            <input name="title" type="text" class="form-control" value="{{ post.title }}">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Body</label>
+                            <textarea name="body" class="form-control" rows="5">{{ post.body }}</textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Published</label>
+                            <select name="published" class="form-control">
+                                {% if post.published %}
+                                    <option selected value="True">True</option>
+                                    <option value="False">False</option>
+                                {% else %}
+                                    <option value="True">True</option>
+                                    <option selected value="False">False</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="text-right">
+                            <button class="btn btn-primary btn-sm">
+                                <i class="mdi mdi-content-save"></i>
+                            </button>
+                            <a href="{% url 'posts:index' %}" class="btn btn-secondary btn-sm">
+                                <i class="mdi mdi-arrow-left-bold"></i>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

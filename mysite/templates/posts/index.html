@@ -1,0 +1,60 @@
+{% extends 'partials/layout.html' %}
+
+{% block title %}
+    Posts
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% for message in messages %}
+            <div class="col-md">
+                <div class="alert alert-success">{{ message }}</div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row justify-content-end mb-2">
+        <div class="col-md-5 text-right">
+            <a href="{% url 'posts:create' %}" class="btn btn-success">
+                Add New Post
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        {% for post in posts %}
+            <div class="col-md-6 mb-2">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md align-self-center">
+                                <span class="card-title">{{ post.title }}</span>
+                                {% if post.published %}
+                                    <div class="text-success d-inline">
+                                        <i class="mdi mdi-check-circle"></i>
+                                    </div>
+                                {% else %}
+                                    <div class="text-danger d-inline">
+                                        <i class="mdi mdi-close-circle"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md text-right">
+                                <form class="d-inline" action="{% url 'posts:destroy' id=post.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="mdi mdi-delete"></i>
+                                    </button>
+                                </form>
+                                <a class="btn btn-success btn-sm" href="{% url 'posts:edit' id=post.id %}">
+                                    <i class="mdi mdi-pencil"></i>
+                                </a>
+                                <a class="btn btn-info btn-sm" href="{% url 'posts:show' id=post.id %}">
+                                    <i class="mdi mdi-information-variant"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

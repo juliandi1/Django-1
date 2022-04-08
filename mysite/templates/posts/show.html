@@ -1,0 +1,89 @@
+{% extends 'partials/layout.html' %}
+
+{% block title %}
+    Detail Posts
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% for message in messages %}
+            <div class="col-md">
+                <div class="alert alert-success">{{ message }}</div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row justify-content-end mb-2">
+        <div class="col-md-5 text-right">
+            <form class="d-inline" action="{% url 'posts:destroy' id=post.id %}" method="post">
+                {% csrf_token %}
+                <button class="btn btn-danger btn-sm">
+                    <i class="mdi mdi-delete"></i>
+                </button>
+            </form>
+            <a class="btn btn-success btn-sm" href="{% url 'posts:edit' id=post.id %}">
+                <i class="mdi mdi-pencil"></i>
+            </a>
+            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#commentModal">
+                <i class="mdi mdi-comment"></i>
+            </button>
+            <a href="{% url 'posts:index' %}" class="btn btn-secondary btn-sm">
+                <i class="mdi mdi-arrow-left-bold"></i>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <div class="card">
+                <div class="card-header text-center">
+                    <span class="card-title">{{ post.title }}</span>
+                    {% if post.published %}
+                        <div class="text-success d-inline">
+                            <i class="mdi mdi-check-circle"></i>
+                        </div>
+                    {% else %}
+                        <div class="text-danger d-inline">
+                            <i class="mdi mdi-close-circle"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <p class="card-description">
+                        {{ post.body }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block modal %}
+    <!-- Modal -->
+    <div class="modal fade" id="commentModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <form action="{% url 'posts:comments.store' id=post.id %}" method="post" class="modal-content">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Add New Comment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-3">
+                        <label>Body</label>
+                        <textarea name="body" class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+                        <i class="mdi mdi-arrow-left-bold"></i>
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="mdi mdi-content-save"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
